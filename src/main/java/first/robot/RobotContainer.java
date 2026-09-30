@@ -8,9 +8,13 @@ import org.wpilib.command2.Command;
 import org.wpilib.command2.button.CommandGamepad;
 import org.wpilib.command2.button.Trigger;
 import first.robot.Constants.OperatorConstants;
+import first.robot.Constants.SwerveConstants;
 import first.robot.commands.Autos;
 import first.robot.commands.ExampleCommand;
+import first.robot.commands.TeleopSwerve;
+import first.robot.generated.TunerConstants;
 import first.robot.subsystems.ExampleSubsystem;
+import first.robot.subsystems.Swerve;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,6 +24,8 @@ import first.robot.subsystems.ExampleSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private final Swerve swerve = TunerConstants.createDrivetrain();
+
   private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 
   private final CommandGamepad driverController =
@@ -39,6 +45,14 @@ public class RobotContainer {
    * org.wpilib.command2.button.CommandJoystick Flight joysticks}.
    */
   private void configureBindings() {
+    swerve.setDefaultCommand(
+        new TeleopSwerve(
+            driverController::getLeftY,
+            driverController::getLeftX,
+            driverController::getRightX,
+            () -> SwerveConstants.maxTranslationalSpeed,
+            swerve));
+
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(exampleSubsystem));
 

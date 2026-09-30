@@ -4,6 +4,16 @@
 
 package first.robot;
 
+import static org.wpilib.units.Units.FeetPerSecond;
+import static org.wpilib.units.Units.RotationsPerSecond;
+import static org.wpilib.units.Units.Seconds;
+
+import org.wpilib.units.measure.AngularAcceleration;
+import org.wpilib.units.measure.AngularVelocity;
+import org.wpilib.units.measure.LinearAcceleration;
+import org.wpilib.units.measure.LinearVelocity;
+import org.wpilib.units.measure.Time;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -15,5 +25,19 @@ package first.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
+  }
+
+  public static class SwerveConstants {
+    public static final LinearVelocity maxTranslationalSpeed = FeetPerSecond.of(15);
+    public static final LinearVelocity slowModeMaxTranslationalSpeed = FeetPerSecond.of(5);
+    public static final AngularVelocity maxRotationalSpeed = RotationsPerSecond.of(1.5);
+
+    public static final Time translationZeroToFull = Seconds.of(0.6);
+    public static final Time rotationZeroToFull = Seconds.of(0.25);
+
+    public static final LinearAcceleration maxTransationalAcceleration =
+        maxTranslationalSpeed.div(translationZeroToFull);
+    public static final AngularAcceleration maxAngularAcceleration =
+        maxRotationalSpeed.div(rotationZeroToFull);
   }
 }
