@@ -15,8 +15,11 @@ import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.linalg.Matrix;
 import org.wpilib.math.numbers.N1;
 import org.wpilib.math.numbers.N3;
+import org.wpilib.smartdashboard.Field2d;
 import org.wpilib.system.Notifier;
 import org.wpilib.system.RobotController;
+import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
@@ -118,6 +121,10 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     /** The SysId routine to test */
     private SysIdRoutine sysIdRoutineToApply = sysIdRoutineTranslation;
+
+    private final TelemetryTable telemetry = Telemetry.getTable("Swerve");
+
+    private Field2d field = new Field2d();
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -252,6 +259,15 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     @Override
     public void periodic() {
+        SwerveDriveState state = getState();
+        field.setRobotPose(state.Pose);
+
+        telemetry.log("Field", field);
+        telemetry.log("Velocity", state.Velocity);
+        telemetry.log("ModulePositions", state.ModulePositions);
+        telemetry.log("ModuleTargets", state.ModuleTargets);
+        telemetry.log("ModuleVelocities", state.ModuleVelocities);
+
         /*
          * Periodically try to apply the operator forward direction for OperatorPerspective control.
          * If we haven't applied the operator forward direction before, then we should apply it regardless of DS state.
